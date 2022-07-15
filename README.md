@@ -1,20 +1,12 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Lirmi Challenge 
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Construir una UI que renderice por pantalla registros en una base de datos local.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+# Condiciones
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+1.	El consumo de información de la base de datos debe ser mediante API.
+2.  La base de datos debe ser en PostgreSQL
+3.	Renderizar con Blazor en un template básico de Mudblazor (diseño libre).
+4.	Estructura de proyecto libre, solo respetar la base publicada.
+5.	El .sql se debe guardar en la carpeta /Utils.
+6.  Publicar los cambios del proyecto en una rama independiente: nombre-rama_nombre_desarrollador.
