@@ -1,0 +1,76 @@
+﻿@page "/Colegios/Home"
+@using Lirmi.Domain.Models
+@using Lirmi.Challenge.WebApp.Services.Colegio
+@inject IColegioService _colegioService;
+@inject NavigationManager NavigationManager;
+
+<MudText Typo="Typo.h4" GutterBottom="true">Listado de colegios</MudText>
+
+
+
+<MudButton  Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="(() => CreateNewHero())">Crear Colegio</MudButton>
+<MudSpacer />
+<MudSpacer />
+<MudSpacer />
+
+<MudTable Items="@_colegioService.Colegios" Hover="true" Filter="new Func<ColegioModel,bool>(FilterFunc1)" >
+	<ToolBarContent>
+		<MudSpacer />
+		<MudTextField @bind-Value="busqueda" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+	</ToolBarContent>
+	<HeaderContent>
+		<MudTh>Id</MudTh>
+		<MudTh>Nombre</MudTh>
+		<MudTh>Activo</MudTh>
+		<MudTh>Acciones</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Id">@context.Id</MudTd>
+		<MudTd DataLabel="Nombre">@context.Nombre</MudTd>
+		<MudTd DataLabel="Activo">@context.Activo</MudTd>
+		<MudTd DataLabel="Acciones">
+			<MudIconButton Icon="@Icons.Filled.ModeEdit" aria-label="delete" @onclick="(() => EditarColegio(context.Id))"></MudIconButton>
+		</MudTd>
+	</RowTemplate>
+	<PagerContent>
+		<MudTablePager />
+	</PagerContent>
+</MudTable>
+<MudSpacer />
+<MudSpacer />
+<MudSpacer />
+
+@code {
+
+	private string busqueda = "";
+
+	protected override async Task OnInitializedAsync()
+	{
+		await _colegioService.ObtenerColegios();
+	}
+
+
+	private bool FilterFunc1(ColegioModel element) => FilterFunc(element, busqueda);
+
+	private bool FilterFunc(ColegioModel element, string searchString)
+	{
+		if (string.IsNullOrWhiteSpace(searchString))
+			return true;
+		if (element.Nombre.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+			return true;
+		return false;
+	}
+
+	void EditarColegio(int id)
+	{
+
+		NavigationManager.NavigateTo($"Colegios/Editar/{id}");
+	}
+
+
+	void CreateNewHero()
+	{
+		NavigationManager.NavigateTo("Colegios/Editar");
+	}
+
+}
