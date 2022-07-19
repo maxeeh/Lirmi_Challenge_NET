@@ -36,20 +36,21 @@ namespace Limi.Persistence.Postgresql.Repositories
 
         public async Task<List<CursoModel>> GetAll()
         {
-            var cursos = await lirmiContext.Set<Curso>().ToListAsync();
+            var cursos = await lirmiContext.Cursos.Include(a => a.Colegio).ToListAsync();
 
             return mapper.Map<IEnumerable<CursoModel>>(cursos).ToList(); ;
         }
 
         public async Task<CursoModel> GetById(int id)
         {
-            var curso = await lirmiContext.Set<Curso>().FindAsync(id);
+            var curso = await lirmiContext.Cursos.Include(a => a.Colegio).AsNoTracking().FirstAsync(x=>x.Id == id);
             return mapper.Map<CursoModel>(curso);
         }
 
         public async Task<CursoModel> Insert(CursoModel cursoModel)
         {
             var entity = mapper.Map<Curso>(cursoModel);
+            entity.ColegioId = cursoModel.Colegio.Id;
             await lirmiContext.Set<Curso>().AddAsync(entity);
             await lirmiContext.SaveChangesAsync();
 
@@ -62,6 +63,7 @@ namespace Limi.Persistence.Postgresql.Repositories
         public async Task<CursoModel> Update(CursoModel cursoModel)
         {
             var entity = mapper.Map<Curso>(cursoModel);
+            entity.ColegioId = cursoModel.Colegio.Id;
             lirmiContext.Set<Curso>().Update(entity);
             await lirmiContext.SaveChangesAsync();
             return cursoModel;

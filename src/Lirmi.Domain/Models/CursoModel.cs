@@ -13,5 +13,6 @@ namespace Lirmi.Domain.Models
         public string Nombre { get; set; }
         public bool Activo { get; set; }
         public List<AsignaturaModel> AsignaturasModel { get; set; }
+        public ColegioModel Colegio { get; set; }
     }
 }

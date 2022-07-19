@@ -16,7 +16,7 @@ namespace Lirmi.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ColegioModel>>> RetornarAreasBandeja()
+        public async Task<ActionResult<List<ColegioModel>>> RetornarColegioBandeja()
         {
             return Ok(await _colegioService.ColegiosGetAll());
         }

@@ -15,6 +15,7 @@ namespace Limi.Persistence.Postgresql.Entities
         [Required]
         public bool Activo { get; set; }
         public List<Asignatura> Asignaturas { get; set; }
-
+        public Colegio Colegio { get; set; }
+        public int ColegioId { get; set; }
     }
 }

@@ -1,0 +1,70 @@
+﻿@page "/Cursos/Home"
+@using Lirmi.Domain.Models
+@using Lirmi.Challenge.WebApp.Services.Curso
+@inject NavigationManager navigationManager;
+@inject ICursoService _cursoService
+
+<MudText Typo="Typo.h4" GutterBottom="true">Listado de Cursos</MudText>
+
+<MudButton  Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="(() => CrearCurso())">Crear Curso</MudButton>
+
+<MudTable Items="@_cursoService.Cursos" Hover="true" Filter="new Func<CursoModel,bool>(FilterCurso)" >
+	<ToolBarContent>
+		<MudSpacer />
+		<MudTextField @bind-Value="busqueda" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+	</ToolBarContent>
+	<HeaderContent>
+		<MudTh>Id</MudTh>
+		<MudTh>Curso</MudTh>
+		<MudTh>Activo</MudTh>
+		<MudTh>Colegio</MudTh>
+		<MudTh>Acciones</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Id">@context.Id</MudTd>
+		<MudTd DataLabel="Curso">@context.Nombre</MudTd>
+		<MudTd DataLabel="Activo">@context.Activo</MudTd>
+		<MudTd DataLabel="Activo">@context.Colegio.Nombre</MudTd>
+		<MudTd DataLabel="Acciones">
+			<MudIconButton Icon="@Icons.Filled.ModeEdit" aria-label="delete" @onclick="(() => EditarCurso(context.Id))"></MudIconButton>
+		</MudTd>
+	</RowTemplate>
+	<PagerContent>
+		<MudTablePager />
+	</PagerContent>
+</MudTable>
+
+
+@code {
+	private string busqueda = "";
+
+	protected override async Task OnInitializedAsync()
+	{
+		await _cursoService.ObtenerCursos();
+	}
+
+	private bool FilterCurso(CursoModel element) => FuncionDeFiltrado(element, busqueda);
+
+	private bool FuncionDeFiltrado(CursoModel element, string searchString)
+	{
+		if (string.IsNullOrWhiteSpace(searchString))
+			return true;
+		if (element.Nombre.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+			return true;
+		if (element.Colegio.Nombre.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+			return true;
+		return false;
+	}
+
+	void EditarCurso(int id)
+	{
+
+		navigationManager.NavigateTo($"Curso/Formulario/{id}");
+	}
+
+
+	void CrearCurso()
+	{
+		navigationManager.NavigateTo("Curso/Formulario");
+	}
+}

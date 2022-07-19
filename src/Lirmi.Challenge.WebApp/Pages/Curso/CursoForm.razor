@@ -1,0 +1,100 @@
+﻿@page "/Curso/Formulario"
+@page "/Curso/Formulario/{id:int}"
+@using Lirmi.Domain.Models
+@using Lirmi.Challenge.WebApp.Services.Curso
+@inject NavigationManager _navigationManager;
+@inject ICursoService _cursoService;
+@inject IColegioService _colegioService;
+
+
+@if(Id == null){
+	<MudText Typo="Typo.h5" GutterBottom="true">Crear Curso</MudText>
+}
+else{
+	<MudText Typo="Typo.h5" GutterBottom="true">Editar Curso</MudText>
+}
+
+<EditForm Model="@curso" OnSubmit="HandleSubmit">
+	<DataAnnotationsValidator/>
+	<MudGrid>
+		<MudItem xs="12" sm="7">
+			<MudCard>
+				<MudCardContent>
+					<MudSelect @bind-Value="colegioSeleccionadoId" Label="Seleccione el Colegio"  Variant="Variant.Outlined"  OffsetY="true">
+
+						@foreach (var colegio in colegios){
+							<MudSelectItem  Value="@colegio.Id">@colegio.Nombre</MudSelectItem>
+						}
+					</MudSelect>
+
+					<MudTextField Label="Nombre" Class="mt-3"
+					              @bind-Value="curso.Nombre" For="@(() => curso.Nombre)"/>
+				</MudCardContent>
+				<MudCardActions>
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Registrar </MudButton>
+				</MudCardActions>
+			</MudCard>
+		</MudItem>
+	</MudGrid>
+</EditForm>
+
+@code {
+	[Parameter]
+	public int? Id { get; set; }
+	CursoModel curso = new CursoModel { AsignaturasModel = new List<AsignaturaModel>(), Colegio = new ColegioModel()};
+	List<ColegioModel> colegios = new List<ColegioModel>();
+	int colegioSeleccionadoId;
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		colegios.Add(new ColegioModel(){Nombre = "Seleccione"});
+		await _colegioService.ObtenerColegios();
+
+		if (_colegioService.Colegios.Any())
+		{
+			colegios = _colegioService.Colegios;
+		}
+
+	}
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (Id != null)
+		{
+			curso = await _cursoService.ObtenerCursoPorId((int)Id);
+			colegioSeleccionadoId = curso.Colegio.Id;
+		}
+		
+	}
+
+	async Task HandleSubmit()
+	{
+		if (Id == null)
+		{
+			curso.AsignaturasModel = new List<AsignaturaModel>();
+			curso.Activo = true;
+			if (colegioSeleccionadoId > 0 && colegios.Any(x => x.Id == colegioSeleccionadoId))
+			{
+				curso.Colegio =  colegios.FirstOrDefault(x => x.Id == colegioSeleccionadoId);
+				curso.Colegio.CursosModels = new List<CursoModel>();
+			}
+			await _cursoService.CrearCurso(curso);
+			_navigationManager.NavigateTo("Cursos/Home");
+
+		}
+		else
+		{
+			curso.AsignaturasModel = new List<AsignaturaModel>();
+
+			if (colegioSeleccionadoId > 0 && colegios.Any(x => x.Id == colegioSeleccionadoId))
+			{
+				curso.Colegio =  colegios.FirstOrDefault(x => x.Id == colegioSeleccionadoId);
+				curso.Colegio.CursosModels = new List<CursoModel>();
+			}
+
+			await _cursoService.ActualizarCurso(curso);
+			_navigationManager.NavigateTo("Cursos/Home");
+		}
+	}
+}

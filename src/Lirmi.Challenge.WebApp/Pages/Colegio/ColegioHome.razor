@@ -1,14 +1,13 @@
 ﻿@page "/Colegios/Home"
 @using Lirmi.Domain.Models
-@using Lirmi.Challenge.WebApp.Services.Colegio
 @inject IColegioService _colegioService;
-@inject NavigationManager NavigationManager;
+@inject NavigationManager navigationManager;
 
 <MudText Typo="Typo.h4" GutterBottom="true">Listado de colegios</MudText>
 
 
 
-<MudButton  Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="(() => CreateNewHero())">Crear Colegio</MudButton>
+<MudButton  Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="(() => CrearColegio())">Crear Colegio</MudButton>
 <MudSpacer />
 <MudSpacer />
 <MudSpacer />
@@ -64,13 +63,13 @@
 	void EditarColegio(int id)
 	{
 
-		NavigationManager.NavigateTo($"Colegios/Editar/{id}");
+		navigationManager.NavigateTo($"Colegios/Editar/{id}");
 	}
 
 
-	void CreateNewHero()
+	void CrearColegio()
 	{
-		NavigationManager.NavigateTo("Colegios/Editar");
+		navigationManager.NavigateTo("Colegios/Editar");
 	}
 
 }
