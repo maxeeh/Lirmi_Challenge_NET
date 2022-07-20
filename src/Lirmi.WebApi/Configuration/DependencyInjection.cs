@@ -15,7 +15,7 @@ namespace Lirmi.WebApi.Configuration
 
         public static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            services.AddTransient<ICursoRepository, CursoRepository>();
+            services.AddScoped<ICursoRepository, CursoRepository>();
             services.AddTransient<ICursoAsignaturaRepository, CursoAsignaturRepository>();
             services.AddScoped<IColegioRepository, ColegioRepository>();
             services.AddTransient<IAsignaturaRepository, AsignaturaRepository>();
@@ -24,7 +24,7 @@ namespace Lirmi.WebApi.Configuration
 
         public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
         {
-            services.AddTransient<CursoService>();
+            services.AddScoped<CursoService>();
             services.AddTransient<AsignaturaService>();
             services.AddScoped<ColegioService>();
             services.AddTransient<CursoAsignaturaService>();

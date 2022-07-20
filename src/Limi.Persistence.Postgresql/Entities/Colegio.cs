@@ -9,6 +9,10 @@ namespace Limi.Persistence.Postgresql.Entities
 {
     public class Colegio
     {
+        public Colegio()
+        {
+            Cursos = new List<Curso>();
+        }
         public int Id { get; set; }
         [Required]
         public string Nombre { get; set; }

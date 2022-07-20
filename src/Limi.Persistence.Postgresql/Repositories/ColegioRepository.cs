@@ -39,7 +39,7 @@ namespace Limi.Persistence.Postgresql.Repositories
         {
             try
             {
-                var colegios = await lirmiContext.Colegios.ToListAsync();
+                var colegios = await lirmiContext.Colegios.AsNoTracking().ToListAsync();
 
                 return mapper.Map<IEnumerable<ColegioModel>>(colegios).ToList(); ;
             }

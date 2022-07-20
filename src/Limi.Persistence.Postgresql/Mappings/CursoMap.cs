@@ -13,7 +13,7 @@ namespace Limi.Persistence.Postgresql.Mappings
     {
         public CursoMap()
         {
-            CreateMap<CursoModel, Curso>();
+            CreateMap<CursoModel, Curso>().ForMember(x => x.Colegio, opt => opt.Ignore());
             CreateMap<Curso, CursoModel>();
         }
     }

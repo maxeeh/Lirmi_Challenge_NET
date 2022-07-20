@@ -49,15 +49,24 @@ namespace Limi.Persistence.Postgresql.Repositories
 
         public async Task<CursoModel> Insert(CursoModel cursoModel)
         {
-            var entity = mapper.Map<Curso>(cursoModel);
-            entity.ColegioId = cursoModel.Colegio.Id;
-            await lirmiContext.Set<Curso>().AddAsync(entity);
-            await lirmiContext.SaveChangesAsync();
+            try
+            {
+                Curso entity = mapper.Map<Curso>(cursoModel);
+                entity.ColegioId = cursoModel.Colegio.Id;
+                await lirmiContext.Cursos.AddAsync(entity);
+                await lirmiContext.SaveChangesAsync();
 
-            if (entity.Id > 0)
-                cursoModel.Id = entity.Id;
+                if (entity.Id > 0)
+                    cursoModel.Id = entity.Id;
 
-            return cursoModel;
+                return cursoModel;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+          
         }
 
         public async Task<CursoModel> Update(CursoModel cursoModel)
